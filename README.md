@@ -1,6 +1,7 @@
 # LaZSL
 This repository contains the code for the ICCV'25 paper titled with  "***Intrepretable Zero-Shot Learning with Locally-Aligned Vision-Language Model***".
 
+
 ## Requirements
 First install the dependencies.
 
@@ -31,7 +32,16 @@ Results of our released models using various evaluation protocols on 6 datasets.
 | Place365 | 41.5 | 42.0 | 41.8 | 
 
 ## Citation
-If you find LaZSL is useful in your research or applications, please consider giving us a star 🌟.
+If you find LaZSL is useful in your research or applications, please consider giving us a star 🌟 and citing it by the following BibTeX entry.
+
+```bibtex
+@inproceedings{chen2025interpretable,
+  title={Interpretable Zero-Shot Learning with Locally-Aligned Vision-Language Model},
+  author={Chen, Shiming and Duan, Bowen and Khan, Salman and Khan, Fahad Shahbaz},
+  booktitle={ICCV}
+  year={2025}
+}
+```
 
 
 
