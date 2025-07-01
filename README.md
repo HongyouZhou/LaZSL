@@ -1,6 +1,7 @@
 # LaZSL
 This repository contains the code for the ICCV'25 paper titled with  "***Intrepretable Zero-Shot Learning with Locally-Aligned Vision-Language Model***".
 
+Pre-print version at [[arXiv]](https://arxiv.org/pdf/2506.23822)
 
 ## Requirements
 First install the dependencies.
