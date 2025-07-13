@@ -18,7 +18,6 @@ from loading_helpers import *
 from OP import *
 from torchvision import datasets
 from my_datasets import *
-from config import *
 
 from utils import (
     imagenet_a_lt,
@@ -31,15 +30,9 @@ hparams = {}
 
 hparams['model_size'] = "ViT-B/16"
 # Options:
-# ['RN50',
-#  'RN101',
-#  'RN50x4',
-#  'RN50x16',
-#  'RN50x64',
-#  'ViT-B/32',
+# ['ViT-B/32',
 #  'ViT-B/16',
-#  'ViT-L/14',
-#  'ViT-L/14@336px']
+#  'ViT-L/14']
 hparams['dataset'] = 'imagenet'
 hparams['max_iter'] = 100
 hparams['n_samples'] = 90
@@ -130,9 +123,14 @@ def custom_loader(path: str) -> torch.Tensor:
     return torch.stack(augmented_imgs)
 
 
-
+from config import *
 if hparams['dataset'] == 'imagenet':
     if hparams['dataset'] == 'imagenet':
+        hparams['n_samples'] = N_imagenet
+        # for mix
+        hparams['alpha'] = theta_imagenet
+        # for crop
+        hparams['alpha_crop'] = alpha_imagenet
         dsclass = ImageNet
         hparams['data_dir'] = pathlib.Path(IMAGENET_DIR)
         # train_ds = ImageNet(hparams['data_dir'], split='val', transform=train_tfms)
@@ -147,6 +145,11 @@ if hparams['dataset'] == 'imagenet':
 elif hparams['dataset'] == 'imagenetv2':
     hparams['data_dir'] = pathlib.Path(IMAGENETV2_DIR)
     hparams['class_num'] = 1000
+    hparams['n_samples'] = N_imagenetv2
+    # for mix
+    hparams['alpha'] = theta_imagenetv2
+    # for crop
+    hparams['alpha_crop'] = alpha_imagenetv2
     mydataset = ImageNetV2Dataset(
             location=hparams['data_dir'],
             transform=None,
@@ -161,6 +164,11 @@ elif hparams['dataset'] == 'imagenet-r':
     hparams['data_dir'] = pathlib.Path(IMAGENETR_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 200
+    hparams['n_samples'] = N_imagenetr
+    # for mix
+    hparams['alpha'] = theta_imagenetr
+    # for crop
+    hparams['alpha_crop'] = alpha_imagenetr
     mydataset = dsclass(
         hparams['data_dir'],
         transform=None,
@@ -173,6 +181,11 @@ elif hparams['dataset'] == 'imagenet-a':
     hparams['data_dir'] = pathlib.Path(IMAGENETA_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 200
+    hparams['n_samples'] = N_imageneta
+    # for mix
+    hparams['alpha'] = theta_imageneta
+    # for crop
+    hparams['alpha_crop'] = alpha_imageneta
     mydataset = dsclass(
         hparams['data_dir'],
         transform=None,
@@ -185,6 +198,11 @@ elif hparams['dataset'] == 'imagenet-s':
     hparams['data_dir'] = pathlib.Path(IMAGENETS_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 1000
+    hparams['n_samples'] = N_imagenets
+    # for mix
+    hparams['alpha'] = theta_imagenets
+    # for crop
+    hparams['alpha_crop'] = alpha_imagenets
     mydataset = dsclass(
         hparams['data_dir'],
         transform=None,
@@ -199,6 +217,12 @@ elif hparams['dataset'] == 'imagenet-s':
 elif hparams['dataset'] == 'cub':
     # load CUB dataset
     hparams['data_dir'] = pathlib.Path(CUB_DIR)
+    hparams['n_samples'] = N_cub
+    # for mix
+    hparams['alpha'] = theta_cub
+    # for crop
+    hparams['alpha_crop'] = alpha_cub
+
     mydataset = CUBDataset(hparams['data_dir'], train=False, transform=None, loader=custom_loader)
     classes_to_load = None #dataset.classes
     hparams['descriptor_fname'] = 'descriptors_cub'
@@ -206,17 +230,16 @@ elif hparams['dataset'] == 'cub':
 
 # I recommend using VISSL https://github.com/facebookresearch/vissl/blob/main/extra_scripts/README.md to download these
     
-elif hparams['dataset'] == 'eurosat':
-    from extra_datasets.patching.eurosat import EuroSATVal
-    hparams['data_dir'] = pathlib.Path(EUROSAT_DIR)
-    dataset = EuroSATVal(location=hparams['data_dir'], preprocess=tfms)
-    dataset = dataset.test_dataset
-    hparams['descriptor_fname'] = 'descriptors_eurosat'
-    classes_to_load = None
+
     
 elif hparams['dataset'] == 'places365':
     hparams['class_num'] = 365
     hparams['data_dir'] = pathlib.Path(PLACES_DIR)
+    hparams['n_samples'] = N_place
+    # for mix
+    hparams['alpha'] = theta_place
+    # for crop
+    hparams['alpha_crop'] = alpha_place
     mydataset = Places365(hparams['data_dir'], split='val', download=False, transform=None, loader=custom_loader)
     #dsclass = ImageFolder
     #dataset = dsclass(hparams['data_dir'] / 'val', transform=tfms)
@@ -227,6 +250,11 @@ elif hparams['dataset'] == 'food101':
     hparams['data_dir'] = pathlib.Path(FOOD101_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 101
+    hparams['n_samples'] = N_food
+    # for mix
+    hparams['alpha'] = theta_food
+    # for crop
+    hparams['alpha_crop'] = alpha_food
     mydataset = Food101(
         hparams['data_dir'],
         transform=None,
@@ -240,6 +268,12 @@ elif hparams['dataset'] == 'pets':
     hparams['data_dir'] = pathlib.Path(PETS_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 37
+
+    hparams['n_samples'] = N_pet
+    # for mix
+    hparams['alpha'] = theta_pet
+    # for crop
+    hparams['alpha_crop'] = alpha_pet
     mydataset = OxfordIIITPet(
         hparams['data_dir'],
         transform=None,
@@ -249,20 +283,7 @@ elif hparams['dataset'] == 'pets':
     hparams['descriptor_fname'] = 'descriptors_pets'
     classes_to_load = None
     
-elif hparams['dataset'] == 'dtd':
-    hparams['class_num'] = 47
-    hparams['data_dir'] = pathlib.Path(DTD_DIR)
-    mydataset = DTD(
-        hparams['data_dir'],
-        transform=None,
-        split="test",
-        loader=custom_loader,
-    )
 
-    hparams['descriptor_fname'] = 'descriptors_dtd'
-    classes_to_load = None
-
-    
 
 
 
