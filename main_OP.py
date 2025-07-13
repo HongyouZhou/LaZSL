@@ -22,7 +22,7 @@ model.to(device)
 model.eval()
 model.requires_grad_(False)
 #op=OP(max_iter=hparams['max_iter'],M=49,N=5,n_cls=hparams['class_num'],b=bs)
-op_d=OP_d(max_iter=hparams['max_iter'], gama=hparams['gama'],constrain_type=hparams['constrain_type'],alpha=hparams['alpha'])
+op_d=OP_d(max_iter=hparams['max_iter'], gama=hparams['gama'],constrain_type=hparams['constrain_type'],theta=hparams['theta'])
 
 print("Encoding descriptions...")
 
@@ -30,7 +30,7 @@ description_encodings = compute_description_encodings(model)
 
 label_encodings = compute_label_encodings(model)
 
-print("n_samples: %d \nalpha: %f \nalpha_crop: %f" %(hparams['n_samples'],hparams['alpha'],hparams['alpha_crop']))
+print("n_samples: %d \nalpha: %f \ntheta: %f" %(hparams['n_samples'],hparams['alpha'],hparams['theta']))
 print("constrain_type: %s " %(hparams['constrain_type']))
 
 print("Evaluating...")

@@ -8,9 +8,9 @@ import pathlib
 
 from torch.utils.data import DataLoader, Subset
 from torchvision import transforms
-#from torchvision.datasets import ImageNet, ImageFolder, Places365
+
 from torchvision.datasets import ImageFolder
-#from imagenetv2_pytorch import ImageNetV2Dataset as ImageNetV2
+
 from datasets import _transform, CUBDataset, random_crop
 from collections import OrderedDict
 from myclip import clip
@@ -18,7 +18,6 @@ from loading_helpers import *
 from OP import *
 from torchvision import datasets
 from my_datasets import *
-from config import *
 
 from utils import (
     imagenet_a_lt,
@@ -27,26 +26,107 @@ from utils import (
 
 
 hparams = {}
+
+
+def get_params(model, dataset):
+    params = {}
+
+    if model == "ViT-B/16":
+        if dataset == "imagenet":
+            params['alpha'] = 0.6
+            params['theta'] = 0.8
+            params['N'] = 90
+        elif dataset == "cub":
+            params['alpha'] = 0.6
+            params['theta'] = 0.9
+            params['N'] = 90
+        elif dataset == "pets":
+            params['alpha'] = 0.6
+            params['theta'] = 0.2
+            params['N'] = 80
+        elif dataset == "food":
+            params['alpha'] = 0.6
+            params['theta'] = 0.8
+            params['N'] = 90
+        elif dataset == "place":
+            params['alpha'] = 0.4
+            params['theta'] = 0.8
+            params['N'] = 60
+        elif dataset == "imagenetv2":
+            params['alpha'] = 0.5
+            params['theta'] = 0.8
+            params['N'] = 70
+        elif dataset == "imagenet-r":
+            params['alpha'] = 0.6
+            params['theta'] = 0.8
+            params['N'] = 90
+        elif dataset == "imagenet-a":
+            params['alpha'] = 0.5
+            params['theta'] = 0.95
+            params['N'] = 90
+        elif dataset == "imagenet-s":
+            params['alpha'] = 0.6
+            params['theta'] = 0.8
+            params['N'] = 80
+    elif model == "ViT-B/32":
+        if dataset == "imagenet":
+            params['alpha'] = 0.6
+            params['theta'] = 0.8
+            params['N'] = 90
+        elif dataset == "cub":
+            params['alpha'] = 0.5
+            params['theta'] = 0.95
+            params['N'] = 80
+        elif dataset == "pets":
+            params['alpha'] = 0.6
+            params['theta'] = 0.9
+            params['N'] = 80
+        elif dataset == "food":
+            params['alpha'] = 0.6
+            params['theta'] = 0.9
+            params['N'] = 80
+        elif dataset == "place":
+            params['alpha'] = 0.6
+            params['theta'] = 0.9
+            params['N'] = 80
+    elif model == "ViT-L/14":
+        if dataset == "imagenet":
+            params['alpha'] = 0.6
+            params['theta'] = 0.8
+            params['N'] = 70
+        elif dataset == "cub":
+            params['alpha'] = 0.5
+            params['theta'] = 0.9
+            params['N'] = 80
+        elif dataset == "pets":
+            params['alpha'] = 0.6
+            params['theta'] = 0.8
+            params['N'] = 60
+        elif dataset == "food":
+            params['alpha'] = 0.6
+            params['theta'] = 0.9
+            params['N'] = 70
+        elif dataset == "place":
+            params['alpha'] = 0.4
+            params['theta'] = 0.9
+            params['N'] = 70
+
+    return params
 # hyperparameters
 
 hparams['model_size'] = "ViT-B/16"
 # Options:
-# ['RN50',
-#  'RN101',
-#  'RN50x4',
-#  'RN50x16',
-#  'RN50x64',
-#  'ViT-B/32',
+# ['ViT-B/32',
 #  'ViT-B/16',
-#  'ViT-L/14',
-#  'ViT-L/14@336px']
+#  'ViT-L/14']
 hparams['dataset'] = 'imagenet'
+params = get_params(hparams['model_size'], hparams['dataset'])
 hparams['max_iter'] = 100
-hparams['n_samples'] = 90
+hparams['n_samples'] = params['N']
 #for mix
-hparams['alpha'] = 0.8
+hparams['theta'] = params['theta']
 #for crop
-hparams['alpha_crop'] = 0.6
+hparams['alpha'] = params['alpha']
 #for constrain
 hparams['gama'] = 0.0
 hparams['constrain_type'] = 'att' #['patch','att','const']
@@ -125,10 +205,9 @@ def custom_loader(path: str) -> torch.Tensor:
     img = datasets.folder.default_loader(path)
     # Process the image and generate additional augmented samples
     augmented_imgs = [processor(img)]
-    augmented_imgs.extend(processor(random_crop(img,alpha=hparams['alpha_crop'])) for _ in range(n_samples))
+    augmented_imgs.extend(processor(random_crop(img,alpha=hparams['alpha'])) for _ in range(n_samples))
     # Return a stacked tensor of all processed images
     return torch.stack(augmented_imgs)
-
 
 
 if hparams['dataset'] == 'imagenet':
@@ -147,6 +226,7 @@ if hparams['dataset'] == 'imagenet':
 elif hparams['dataset'] == 'imagenetv2':
     hparams['data_dir'] = pathlib.Path(IMAGENETV2_DIR)
     hparams['class_num'] = 1000
+
     mydataset = ImageNetV2Dataset(
             location=hparams['data_dir'],
             transform=None,
@@ -161,6 +241,7 @@ elif hparams['dataset'] == 'imagenet-r':
     hparams['data_dir'] = pathlib.Path(IMAGENETR_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 200
+
     mydataset = dsclass(
         hparams['data_dir'],
         transform=None,
@@ -173,6 +254,7 @@ elif hparams['dataset'] == 'imagenet-a':
     hparams['data_dir'] = pathlib.Path(IMAGENETA_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 200
+
     mydataset = dsclass(
         hparams['data_dir'],
         transform=None,
@@ -185,6 +267,7 @@ elif hparams['dataset'] == 'imagenet-s':
     hparams['data_dir'] = pathlib.Path(IMAGENETS_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 1000
+
     mydataset = dsclass(
         hparams['data_dir'],
         transform=None,
@@ -199,6 +282,8 @@ elif hparams['dataset'] == 'imagenet-s':
 elif hparams['dataset'] == 'cub':
     # load CUB dataset
     hparams['data_dir'] = pathlib.Path(CUB_DIR)
+
+
     mydataset = CUBDataset(hparams['data_dir'], train=False, transform=None, loader=custom_loader)
     classes_to_load = None #dataset.classes
     hparams['descriptor_fname'] = 'descriptors_cub'
@@ -206,15 +291,9 @@ elif hparams['dataset'] == 'cub':
 
 # I recommend using VISSL https://github.com/facebookresearch/vissl/blob/main/extra_scripts/README.md to download these
     
-elif hparams['dataset'] == 'eurosat':
-    from extra_datasets.patching.eurosat import EuroSATVal
-    hparams['data_dir'] = pathlib.Path(EUROSAT_DIR)
-    dataset = EuroSATVal(location=hparams['data_dir'], preprocess=tfms)
-    dataset = dataset.test_dataset
-    hparams['descriptor_fname'] = 'descriptors_eurosat'
-    classes_to_load = None
+
     
-elif hparams['dataset'] == 'places365':
+elif hparams['dataset'] == 'place':
     hparams['class_num'] = 365
     hparams['data_dir'] = pathlib.Path(PLACES_DIR)
     mydataset = Places365(hparams['data_dir'], split='val', download=False, transform=None, loader=custom_loader)
@@ -223,7 +302,7 @@ elif hparams['dataset'] == 'places365':
     hparams['descriptor_fname'] = 'descriptors_places365'
     classes_to_load = None
     
-elif hparams['dataset'] == 'food101':
+elif hparams['dataset'] == 'food':
     hparams['data_dir'] = pathlib.Path(FOOD101_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 101
@@ -240,6 +319,7 @@ elif hparams['dataset'] == 'pets':
     hparams['data_dir'] = pathlib.Path(PETS_DIR)
     dsclass = ImageFolder
     hparams['class_num'] = 37
+
     mydataset = OxfordIIITPet(
         hparams['data_dir'],
         transform=None,
@@ -249,20 +329,7 @@ elif hparams['dataset'] == 'pets':
     hparams['descriptor_fname'] = 'descriptors_pets'
     classes_to_load = None
     
-elif hparams['dataset'] == 'dtd':
-    hparams['class_num'] = 47
-    hparams['data_dir'] = pathlib.Path(DTD_DIR)
-    mydataset = DTD(
-        hparams['data_dir'],
-        transform=None,
-        split="test",
-        loader=custom_loader,
-    )
 
-    hparams['descriptor_fname'] = 'descriptors_dtd'
-    classes_to_load = None
-
-    
 
 
 

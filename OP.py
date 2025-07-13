@@ -47,7 +47,7 @@ class OP():
         return sim_op
 
 class OP_d():
-    def __init__(self, max_iter,gama,alpha,constrain_type='const'):
+    def __init__(self, max_iter,gama,theta,constrain_type='const'):
         super(OP_d, self).__init__()
         self.max_iter= max_iter
         #self.M=M
@@ -56,7 +56,7 @@ class OP_d():
         self.gama= torch.tensor(gama,dtype=torch.half)
         self.zero= torch.tensor(-10,dtype=torch.half)
         self.constrain_type=constrain_type #['patch','att','const']
-        self.alpha=alpha
+        self.theta=theta
        # self.b=b
 
     def Sinkhorn(self, K, u, v):
@@ -86,7 +86,7 @@ class OP_d():
         if is_cost_global:
             global_sim=sim[:,0,:].unsqueeze(1)
             region_sim=sim[:,1:,:]
-            sim_global=(1-self.alpha)*global_sim + (self.alpha * region_sim)
+            sim_global=(1-self.theta)*global_sim + (self.theta * region_sim)
             sim=region_sim
             self.M = sim_global.shape[1]
 
