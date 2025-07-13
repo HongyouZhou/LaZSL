@@ -18,6 +18,7 @@ from loading_helpers import *
 from OP import *
 from torchvision import datasets
 from my_datasets import *
+from config import *
 
 from utils import (
     imagenet_a_lt,
@@ -51,7 +52,7 @@ hparams['gama'] = 0.0
 hparams['constrain_type'] = 'att' #['patch','att','const']
 
 
-hparams['batch_size'] = 1
+hparams['batch_size'] = 50
 hparams['device'] = "cuda:2"
 hparams['category_name_inclusion'] = 'prepend' #'append' 'prepend'
 
