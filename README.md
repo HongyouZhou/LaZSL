@@ -17,7 +17,7 @@ Please follow the instructions [DATASETS.md](https://github.com/KaiyangZhou/CoOp
 
 ## Running
 
-To reproduce accuracy results from the paper: edit the directories to match your local machine in `load_OP.py` and set `hparams['dataset']` accordingly. Then simply run `python main_OP.py`. Furthermore, all hyperparameters related to the datasets are provided in the `load_OP.py` and all hyperparameters can be modified.
+To reproduce accuracy results from the paper: edit the directories to match your local machine in `load_OP.py` and set `hparams['dataset']` accordingly. Then simply run `python main_OP.py`. Furthermore, all hyperparameters related to the different datasets are provided in the `load_OP.py` and all hyperparameters can be modified.
 
 ## Results
 Results of our released models using various evaluation protocols on 6 datasets.
