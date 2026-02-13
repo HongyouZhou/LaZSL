@@ -1,0 +1,19 @@
+# LaZSL Configuration
+# All dataset paths are relative to data_root (unless absolute)
+
+data_root: /home/hongyou/dev/data/zsl
+
+datasets:
+  imagenet:    imagenet/images
+  imagenetv2:  imagenetv2
+  imagenet-r:  imagenet-rendition/imagenet-r
+  imagenet-a:  imagenet-adversarial/imagenet-a
+  imagenet-s:  imagenet-sketch/images
+  cub:         CUB/CUB_200_2011
+  food:        food-101
+  pets:        oxford_pets
+  place:       place365
+  dtd:         dtd
+  eurosat:     eurosat
+
+device: cuda:0
