@@ -827,7 +827,14 @@
         "stacks of building materials",
         "temporary fencing or barriers"
     ],
-    "corn_field": [],
+    "corn_field": [
+        "a large area of land where corn is grown.",
+        "a large area of land, typically rectangular in shape, that is planted with corn.",
+        "a type of place that is typically large and rectangular, and is planted with rows of corn plants.",
+        "large areas of land that are planted with corn.",
+        "large areas of land that are planted with corn crops.",
+        "a place where corn is grown."
+    ],
     "corral": [
         "a fence or enclosure",
         "made of wood, metal, or stone",

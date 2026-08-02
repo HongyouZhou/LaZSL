@@ -213,7 +213,11 @@
         "salt",
         "pepper"
     ],
-    "donuts": [],
+    "donuts": [
+        "a round shape",
+        "brown (from frying)",
+        "a shiny glaze or frosting on top"
+    ],
     "dumplings": [
         "small, round, and filled with meat or vegetables",
         "wrapped in a thin dough",
@@ -272,7 +276,10 @@
         "often served with a sweet or savory sauce",
         "may be garnished with fruit, nuts, or herbs"
     ],
-    "french fries": [],
+    "french fries": [
+        "french fries",
+        "french fries"
+    ],
     "french onion soup": [
         "a bowl of soup",
         "onions in the soup",
@@ -291,7 +298,10 @@
         "pointy ears",
         "big, round eyes"
     ],
-    "fried calamari": [],
+    "fried calamari": [
+        "fried calamari",
+        "fried calamari"
+    ],
     "fried rice": [
         "a dish made of rice that has been stir-fried in a wok or a frying pan",
         "can be made with various ingredients like meats, vegetables, and eggs",
@@ -440,7 +450,10 @@
         "seaweed",
         "a spoon"
     ],
-    "mussels": [],
+    "mussels": [
+        "mussels",
+        "mussels"
+    ],
     "nachos": [
         "a dish of tortilla chips",
         "covered in cheese",
@@ -461,7 +474,10 @@
         "onion as the main ingredient",
         "served with a dipping sauce"
     ],
-    "oysters": [],
+    "oysters": [
+        "oysters",
+        "oysters"
+    ],
     "pad thai": [
         "a type of Asian noodle dish",
         "noodles are usually made from rice, wheat, or egg",
